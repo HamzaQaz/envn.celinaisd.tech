@@ -3,6 +3,7 @@ const path = require("path");
 const http = require("http");
 const { Server } = require("socket.io");
 const db = require('./db')
+const { exec } = require('child_process');
 
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -48,7 +49,7 @@ const adminRouter = require("./routes/admin");
 // Login/session routes
 // Login/session routes
 app.get("/login", (req, res) => res.render("login", { title: "Login", error: null }));
-app.post('/ghwh', (req, res) => {
+app.post('/gitweb', (req, res) => {
 
   exec('git -C /root/envn.celinaisd.tech pull origin main', (err, stdout, stderr) => {
     if (err) {
@@ -56,7 +57,7 @@ app.post('/ghwh', (req, res) => {
       return res.status(500).send('Git pull failed')
     }
     console.log('Git pull output', stdout);
-    res.status(204).end();
+    res.status(204).send('Pulled');
   });
 });
 app.post("/login", (req, res) => {
