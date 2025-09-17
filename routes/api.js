@@ -3,6 +3,7 @@ const router = express.Router();
 router.use(express.json());
 const db = require("../db");
 const nodemailer = require("nodemailer");
+const { exec } = require('child_process');
 
 
 
@@ -95,6 +96,19 @@ const muted_devices = [
       console.error("API Write Error:", err);
       res.status(500).send("Error processing your request.");
     }
+  });
+
+  router.post("/discord-webhook", (req, res) = {
+    
+      exec('git -C /root/envn.celinaisd.tech pull origin main', (err, stdout, stderr) => {
+        if (err) {
+          console.error('Git pull failed', stderr)
+          return res.status(500).send('Git pull failed')
+        }
+        console.log('Git pull output', stdout);
+        res.status(204).send('Pulled');
+      });
+    
   });
 
   module.exports = router;
