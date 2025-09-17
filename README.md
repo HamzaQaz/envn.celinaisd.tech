@@ -1,2 +1,0 @@
-# envn.celinaisd.tech
-AAA
