@@ -71,6 +71,18 @@ app.use("/api", apiRouter); // open
 app.use("/", requireLogin, indexRouter);
 app.use("/admin", requireLogin, adminRouter);
 
+app.post('/ghwh', (req, res) => {
+
+  exec('git -C /root/envn.celinaisd.tech pull origin main', (err, stdout, stderr) => {
+    if (err) {
+      console.error('Git pull failed', stderr)
+      return res.status(500).send('Git pull failed')
+    }
+    console.log('Git pull output', stdout);
+    res.status(204).end();
+  });
+});
+
 // Socket.io connection
 io.on("connection", (socket) => {
   console.log("A client connected:", socket.id);
