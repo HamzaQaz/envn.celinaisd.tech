@@ -96,7 +96,7 @@ router.get("/", async (req, res) => {
       title: "Temperature Alarms",
       deviceData,
       locations,
-      alertcount,
+      alerts,
       filter
       
     });
