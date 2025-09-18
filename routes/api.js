@@ -98,7 +98,7 @@ const muted_devices = [
     }
   });
 
-  router.post("/discord-webhook", (req, res) = {
+  router.post("/webhook", (req, res) = {
     
       exec('git -C /root/envn.celinaisd.tech pull origin main', (err, stdout, stderr) => {
         if (err) {
