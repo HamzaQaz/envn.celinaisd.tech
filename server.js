@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 
 
 // Routers
-const apiRouter = require("./routes/api")(io);
+const apiRouter = require("./routes/api");
 const indexRouter = require("./routes/index");
 const adminRouter = require("./routes/admin");
 
