@@ -4,7 +4,7 @@ const db = require("../db");
 const timeago = require('timeago.js')
 
 let Status = ""
-let alertcount = 0
+let alertcount = 1
 
 
 router.get("/login", (req, res) =>
