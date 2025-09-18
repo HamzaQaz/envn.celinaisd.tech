@@ -121,7 +121,7 @@
                 <div class="row">
   <% deviceData.forEach(device => { %>
     <div class="col-md-6 mb-4">
-      <div class="card location-card">
+      <div class="card location-card <%= device.status === `alert` ? `alert-blink` : `` %>">
         <div class="d-flex justify-content-between align-items-center mb-2">
           <div>
             <h6 class="location-title"><h6 class="location-title"><%= device.room %></h6></h6>
