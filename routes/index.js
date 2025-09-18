@@ -53,11 +53,11 @@ router.get("/", async (req, res) => {
      Status = latestReading.length && latestReading[0].HUMIDITY > "55" && latestReading[0].TEMP > "70" ? "alert" : "normal"
      if (Status === "alert") {
       if (alerts.length === 0 ){
-        alerts.push(latestReading.id)
+        alerts.push(tableName)
         console.log(alerts)
       } else {
         if (alerts.length > 0) {
-          alerts.reduce(latestReading.id)
+          alerts.reduce(tableName)
         }
       }
      }
