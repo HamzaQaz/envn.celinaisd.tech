@@ -69,7 +69,7 @@ function requireLogin(req, res, next) {
   }
   return res.redirect("/login");
 }
-app.use("/api", apiRouter); // open
+app.use("/api", apiRouter)(io); // open
 app.use("/", requireLogin, indexRouter);
 app.use("/admin", requireLogin, adminRouter);
 
