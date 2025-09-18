@@ -94,7 +94,7 @@ setInterval(async () => {
     const unknown = await db.query("SELECT * FROM unknowndevices")
     if (unknown.length === 0) return console.log("no unknowndevices.")
     const result = await db.query(
-      "DELETE FROM unknowndevices WHERE LastSeen < NOW() - INTERVAL 5 MINUTE"
+      "DELETE FROM unknowndevices WHERE LastSeen < NOW() - INTERVAL 10 MINUTE"
     ); 
     console.log(result)
   } catch (err) {
