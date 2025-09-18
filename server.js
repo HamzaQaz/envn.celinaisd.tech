@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 
 
 // Routers
-const apiRouter = require("./routes/api");
+const apiRouter = require("./routes/api")(io);
 const indexRouter = require("./routes/index");
 const adminRouter = require("./routes/admin");
 
@@ -69,7 +69,7 @@ function requireLogin(req, res, next) {
   }
   return res.redirect("/login");
 }
-app.use("/api", apiRouter)(io); // open
+app.use("/api", apiRouter); // open
 app.use("/", requireLogin, indexRouter);
 app.use("/admin", requireLogin, adminRouter);
 
