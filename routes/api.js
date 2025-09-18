@@ -3,7 +3,7 @@ const router = express.Router();
 router.use(express.json());
 const db = require("../db");
 const nodemailer = require("nodemailer");
-const { exec } = require('child_process');
+const { exec } = require('child_process'); // child
 
 
 
