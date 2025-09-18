@@ -56,8 +56,8 @@ router.get("/", async (req, res) => {
         alerts.push(tableName)
         console.log(alerts)
       } else {
-        if (alerts.length > 0) {
-          alerts.reduce(tableName)
+        if (Status === "normal") {
+          alerts.pop(tableName)
         }
       }
      }
