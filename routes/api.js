@@ -100,7 +100,7 @@ const muted_devices = [
 
   router.post("/webhook", (req, res) => {
     
-      exec('git -C /root/envn.celinaisd.tech pull origin main && pm2 restart 0', (err, stdout, stderr) => {
+      exec('git -C /root/envn.celinaisd.tech pull origin main', (err, stdout, stderr) => {
         if (err) {
           console.error('Git pull failed', stderr)
           return res.status(500).send('Git pull failed')
@@ -108,6 +108,8 @@ const muted_devices = [
         console.log('Git pull output', stdout);
         res.status(204).send('Pulled');
       });
+
+      exec('pm2 restart 0')
     
   });
 
