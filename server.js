@@ -86,7 +86,7 @@ io.on("connection", (socket) => {
 
 // Start server
 server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
 
 setInterval(async () => {
