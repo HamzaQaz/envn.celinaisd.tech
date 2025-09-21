@@ -18,34 +18,6 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
   <script src="dist/timeago.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
-            // Dark mode toggle UI injected on page load
-            (function () {
-                function applyDark(isDark) {
-                    document.documentElement.classList.toggle('dark-mode', isDark);
-                    localStorage.setItem('darkMode', isDark ? '1' : '0');
-                }
-
-                document.addEventListener('DOMContentLoaded', function () {
-                    var pref = localStorage.getItem('darkMode');
-                    var defaultDark = pref === '1' || (pref === null && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-                    applyDark(defaultDark);
-
-                    // create toggle button
-                    var btn = document.createElement('button');
-                    btn.className = 'btn btn-sm btn-outline-secondary dark-mode-toggle';
-                    btn.title = 'Toggle dark mode';
-                    btn.innerHTML = document.documentElement.classList.contains('dark-mode') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-                    btn.addEventListener('click', function () {
-                        var isDark = !document.documentElement.classList.contains('dark-mode');
-                        applyDark(isDark);
-                        btn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-                    });
-
-                    // place button at top-right
-                    document.body && document.body.prepend ? document.body.prepend(btn) : document.body.appendChild(btn);
-                });
-            })();
-        </script>
+    
   </head>
 </html>

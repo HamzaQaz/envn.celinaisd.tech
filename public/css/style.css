@@ -30,35 +30,10 @@ body {
             background-color: #e8f5e9;
             color: #2e7d32;
         }
-                        .alert {
-                                background-color: #fa5053;
-                                color: white;
-                                font-weight: 700;
-                        }
-
-                        /* alert blink animation */
-                        @keyframes alert-blink {
-                            0%, 100% { box-shadow: 0 0 0 0 rgba(250,80,83,0.0); }
-                            50% { box-shadow: 0 0 12px 6px rgba(250,80,83,0.12); }
-                        }
-                        .alert-blink { animation: alert-blink 1.6s ease-in-out infinite; }
-
-                        /* Dark mode overrides */
-                        .dark-mode body { background-color: #121212; color: #e6e6e6; }
-                        .dark-mode .sidebar { background-color: #1e1e1e; box-shadow: none; }
-                        .dark-mode .card { background-color: #1b1b1b; box-shadow: 0 0 6px rgba(0,0,0,0.6); }
-                        .dark-mode .sidebar-item:hover, .dark-mode .sidebar-item.active { background-color: rgba(255,255,255,0.03); }
-                        .dark-mode .normal { background-color: #2e7d3244; color: #e6ffe6; }
-                        /* pastel red for dark mode alerts */
-                        .dark-mode .alert { background-color: #ff9b9b; color: #3b0a0a; }
-
-                        /* Dark mode toggle button */
-                        .dark-mode-toggle {
-                            position: fixed;
-                            top: 10px;
-                            right: 10px;
-                            z-index: 2000;
-                        }
+        .alert {
+            background-color: #263238;
+            color: white;
+        }
         .header-icon {
             font-size: 1.5rem;
             color: #6c757d;
