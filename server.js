@@ -1,18 +1,15 @@
 const express = require("express");
 const path = require("path");
 const http = require("http");
-const { Server } = require("socket.io");
+const socketManager = require('./utils/socketManager');
 const db = require('./db')
-const { exec } = require('child_process');
-
-const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 require("dotenv").config();
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+
 
 const PORT = process.env.PORT || 3000;
 
@@ -21,9 +18,10 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // Middleware
+// Static files + body parsing
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   session({
@@ -46,7 +44,6 @@ const indexRouter = require("./routes/index");
 const adminRouter = require("./routes/admin");
 
 
-// Login/session routes
 // Login/session routes
 app.get("/login", (req, res) => res.render("login", { title: "Login", error: null }));
 
@@ -75,14 +72,10 @@ app.use("/admin", requireLogin, adminRouter);
 
 
 
-// Socket.io connection
-io.on("connection", (socket) => {
-  console.log("A client connected:", socket.id);
 
-  socket.on("disconnect", () => {
-    console.log("Client disconnected:", socket.id);
-  });
-});
+// Initialize Socket.IO using socketManager and start auto-refresh events
+const io = socketManager.init(server);
+socketManager.startAutoRefresh(5000);
 
 // Start server
 server.listen(PORT, () => {
