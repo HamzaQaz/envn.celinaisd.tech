@@ -43,7 +43,7 @@ body {
         }
         .location-title {
             font-weight: 600;
-            margin-bottom: 15px;
+            margin-bottom: 3px;
         }
         .metric-row {
             display: flex;
