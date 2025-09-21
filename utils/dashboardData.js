@@ -53,20 +53,20 @@ async function getDashboardData(filter = '') {
   // Summary calculations
   const totalLocations = locations.length;
   const activeAlerts = alerts.length;
-  const avgTemp =
+const avgTemp =
     deviceData.length > 0
-      ? (
-          deviceData.reduce((s, d) => s + (isNaN(Number(d.temp)) ? 0 : Number(d.temp)), 0) /
-          deviceData.length
-        ).toFixed(1)
-      : 'N/A';
-  const avgHumidity =
+        ? Math.round(
+                deviceData.reduce((s, d) => s + (isNaN(Number(d.temp)) ? 0 : Number(d.temp)), 0) /
+                deviceData.length
+            )
+        : 'N/A';
+const avgHumidity =
     deviceData.length > 0
-      ? (
-          deviceData.reduce((s, d) => s + (isNaN(Number(d.humidity)) ? 0 : Number(d.humidity)), 0) /
-          deviceData.length
-        ).toFixed(1)
-      : 'N/A';
+        ? Math.round(
+                deviceData.reduce((s, d) => s + (isNaN(Number(d.humidity)) ? 0 : Number(d.humidity)), 0) /
+                deviceData.length
+            )
+        : 'N/A';
 
   return {
     deviceData,
