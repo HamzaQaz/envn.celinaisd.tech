@@ -1,3 +1,11 @@
+@keyframes alert-blink {
+    0%, 100% { box-shadow: 0 0 5px rgba(0,0,0,0.05); }
+    50% { box-shadow: 0 0 10px rgba(248, 151, 151, 0.05); }
+}
+
+
+
+
 body {
             background-color: #f5f5f5;
         }
@@ -18,7 +26,7 @@ body {
         }
         .card {
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            box-shadow: 0 0 10px ;
             margin-bottom: 20px;
         }
         .status-badge {
@@ -33,6 +41,7 @@ body {
         .alert {
             background-color: #263238;
             color: white;
+            animation: alert-blink 1s linear infinite;
         }
         .header-icon {
             font-size: 1.5rem;
