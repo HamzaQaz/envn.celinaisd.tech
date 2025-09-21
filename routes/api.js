@@ -109,7 +109,7 @@ const muted_devices = [
         res.status(204).send('Pulled');
       });
 
-      exec('pm2 restart 0')
+      
     
   });
 
