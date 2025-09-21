@@ -77,13 +77,81 @@ app.use("/admin", requireLogin, adminRouter);
 const io = socketManager.init(server);
 const dashboardData = require('./utils/dashboardData');
 
-// emit dashboard updates to connected clients
+// Keep previous snapshot in memory to compute diffs
+let prevSnapshot = null;
+
+// Send full snapshot to newly connected clients
+io.on('connection', async (socket) => {
+  console.log('Socket connected (server-side):', socket.id);
+  try {
+    const full = await dashboardData.getDashboardData();
+    socket.emit('dashboard:full', full);
+  } catch (err) {
+    console.error('Error sending full dashboard to socket', err);
+  }
+});
+
+// Periodically compute diffs and emit only changes
 setInterval(async () => {
   try {
-    const payload = await dashboardData.getDashboardData();
-    io.emit('dashboard:update', payload);
+    const current = await dashboardData.getDashboardData();
+
+    if (!prevSnapshot) {
+      // first run — broadcast full payload
+      io.emit('dashboard:full', current);
+      prevSnapshot = current;
+      return;
+    }
+
+    const prevMap = new Map(prevSnapshot.deviceData.map(d => [d.Name, d]));
+    const currMap = new Map(current.deviceData.map(d => [d.Name, d]));
+
+    const added = [];
+    const updated = [];
+
+    for (const [name, curr] of currMap) {
+      const prev = prevMap.get(name);
+      if (!prev) {
+        added.push(curr);
+        continue;
+      }
+      // compare important fields for changes
+      if (
+        curr.temp !== prev.temp ||
+        curr.humidity !== prev.humidity ||
+        curr.status !== prev.status ||
+        curr.time !== prev.time ||
+        curr.type !== prev.type
+      ) {
+        updated.push(curr);
+      }
+    }
+
+    const removed = [];
+    for (const [name] of prevMap) {
+      if (!currMap.has(name)) removed.push(name);
+    }
+
+    // summary diffs
+    const summaryChanged = {};
+    if (!prevSnapshot) {
+      Object.assign(summaryChanged, current.summary);
+    } else {
+      for (const k of Object.keys(current.summary || {})) {
+        if (String(current.summary[k]) !== String(prevSnapshot.summary?.[k])) {
+          summaryChanged[k] = current.summary[k];
+        }
+      }
+    }
+
+    // If any diffs exist, emit them
+    if (added.length || updated.length || removed.length || Object.keys(summaryChanged).length) {
+      io.emit('dashboard:diff', { added, updated, removed, summary: summaryChanged });
+    }
+
+    prevSnapshot = current;
   } catch (err) {
-    console.error('Error generating dashboard payload', err);
+    console.error('Error generating dashboard diff', err);
   }
 }, 5000);
 

@@ -96,6 +96,184 @@ socket.on('dashboard:update', (payload) => {
   }
 });
 
+// Handle full payload (on connect or fallback)
+socket.on('dashboard:full', (payload) => {
+  try {
+    // reuse same update logic by wrapping into a diff that replaces everything
+    // clear container then render all devices
+    const container = document.getElementById('device-cards');
+    if (container && payload.deviceData) {
+      container.innerHTML = '';
+      payload.deviceData.forEach(device => {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 mb-4 device-card';
+        col.setAttribute('data-name', device.Name);
+        col.innerHTML = `
+          <div class="card location-card ${device.status === 'alert' ? 'alert-blink' : ''}">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <h6 class="location-title"><h6 class="location-title">${device.room}</h6></h6>
+                <small class="text-muted location-sub">${device.location} (${device.campus})</small>
+              </div>
+              <span class="status-badge ${device.status} status-badge-el">${device.status === 'alert' ? 'Alert' : 'Normal'}</span>
+            </div>
+            <div class="location-details mb-2">
+              <span class="location-type"><td><span class="badge ${device.type === 'MDF' ? 'bg-primary' : 'bg-secondary'}">${device.type}</span></td></span>
+            </div>
+            <div class="metric-row">
+              <div class="metric-icon"><i class="fas fa-thermometer-half"></i></div>
+              <span>Temperature</span>
+              <span class="metric-value temp-el">${device.temp}°F</span>
+            </div>
+            <div class="metric-row">
+              <div class="metric-icon"><i class="fas fa-tint"></i></div>
+              <span>Humidity</span>
+              <span class="metric-value humidity-el">${device.humidity}%</span>
+            </div>
+            <div class="metric-row">
+              <div class="metric-icon"><i class="fas fa-clock"></i></div>
+              <span>Last Updated</span>
+              <span class="metric-value time-el">${device.time}</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(col);
+      });
+    }
+
+    // update summary
+    if (payload.summary) {
+      if (document.getElementById('summary-total-locations')) document.getElementById('summary-total-locations').textContent = payload.summary.totalLocations;
+      if (document.getElementById('summary-active-alerts')) document.getElementById('summary-active-alerts').textContent = payload.summary.activeAlerts;
+      if (document.getElementById('summary-avg-temp')) document.getElementById('summary-avg-temp').textContent = payload.summary.avgTemp + '°F';
+      if (document.getElementById('summary-avg-humidity')) document.getElementById('summary-avg-humidity').textContent = payload.summary.avgHumidity + '%';
+    }
+  } catch (err) {
+    console.error('Error applying full dashboard payload', err);
+  }
+});
+
+// Apply incremental diffs: { added, updated, removed, summary }
+socket.on('dashboard:diff', (diff) => {
+  try {
+    // apply summary changes
+    if (diff.summary) {
+      if ('totalLocations' in diff.summary && document.getElementById('summary-total-locations')) document.getElementById('summary-total-locations').textContent = diff.summary.totalLocations;
+      if ('activeAlerts' in diff.summary && document.getElementById('summary-active-alerts')) document.getElementById('summary-active-alerts').textContent = diff.summary.activeAlerts;
+      if ('avgTemp' in diff.summary && document.getElementById('summary-avg-temp')) document.getElementById('summary-avg-temp').textContent = diff.summary.avgTemp + '°F';
+      if ('avgHumidity' in diff.summary && document.getElementById('summary-avg-humidity')) document.getElementById('summary-avg-humidity').textContent = diff.summary.avgHumidity + '%';
+    }
+
+    const container = document.getElementById('device-cards');
+    if (!container) return;
+
+    // removed
+    if (diff.removed && diff.removed.length) {
+      diff.removed.forEach(name => {
+        const el = container.querySelector(`.device-card[data-name="${name}"]`);
+        if (el) el.remove();
+      });
+    }
+
+    // updated
+    if (diff.updated && diff.updated.length) {
+      diff.updated.forEach(device => {
+        const el = container.querySelector(`.device-card[data-name="${device.Name}"]`);
+        if (!el) return;
+        const tempEl = el.querySelector('.temp-el');
+        const humEl = el.querySelector('.humidity-el');
+        const timeEl = el.querySelector('.time-el');
+        const statusEl = el.querySelector('.status-badge-el');
+        const locSub = el.querySelector('.location-sub');
+        if (tempEl) tempEl.textContent = device.temp + '°F';
+        if (humEl) humEl.textContent = device.humidity + '%';
+        if (timeEl) timeEl.textContent = device.time;
+        if (statusEl) {
+          statusEl.textContent = device.status === 'alert' ? 'Alert' : 'Normal';
+          statusEl.className = 'status-badge ' + device.status + ' status-badge-el';
+        }
+        if (locSub) locSub.textContent = device.location + ' (' + device.campus + ')';
+      });
+    }
+
+    // added
+    if (diff.added && diff.added.length) {
+      diff.added.forEach(device => {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 mb-4 device-card';
+        col.setAttribute('data-name', device.Name);
+        col.innerHTML = `
+          <div class="card location-card ${device.status === 'alert' ? 'alert-blink' : ''}">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <h6 class="location-title"><h6 class="location-title">${device.room}</h6></h6>
+                <small class="text-muted location-sub">${device.location} (${device.campus})</small>
+              </div>
+              <span class="status-badge ${device.status} status-badge-el">${device.status === 'alert' ? 'Alert' : 'Normal'}</span>
+            </div>
+            <div class="location-details mb-2">
+              <span class="location-type"><td><span class="badge ${device.type === 'MDF' ? 'bg-primary' : 'bg-secondary'}">${device.type}</span></td></span>
+            </div>
+            <div class="metric-row">
+              <div class="metric-icon"><i class="fas fa-thermometer-half"></i></div>
+              <span>Temperature</span>
+              <span class="metric-value temp-el">${device.temp}°F</span>
+            </div>
+            <div class="metric-row">
+              <div class="metric-icon"><i class="fas fa-tint"></i></div>
+              <span>Humidity</span>
+              <span class="metric-value humidity-el">${device.humidity}%</span>
+            </div>
+            <div class="metric-row">
+              <div class="metric-icon"><i class="fas fa-clock"></i></div>
+              <span>Last Updated</span>
+              <span class="metric-value time-el">${device.time}</span>
+            </div>
+          </div>
+        `;
+        container.prepend(col);
+      });
+    }
+  } catch (err) {
+    console.error('Error applying dashboard diff', err);
+  }
+});
+
 socket.on('disconnect', () => {
   console.log('Socket disconnected');
+});
+
+// Connection status indicator
+function ensureConnIndicator() {
+  let el = document.getElementById('socket-status');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'socket-status';
+    el.style.position = 'fixed';
+    el.style.bottom = '10px';
+    el.style.right = '10px';
+    el.style.padding = '6px 10px';
+    el.style.borderRadius = '6px';
+    el.style.zIndex = 2000;
+    el.style.fontSize = '0.9rem';
+    document.body.appendChild(el);
+  }
+  return el;
+}
+
+function setStatus(connected) {
+  const el = ensureConnIndicator();
+  el.textContent = connected ? 'Live' : 'Disconnected';
+  el.style.background = connected ? 'rgba(40,167,69,0.9)' : 'rgba(220,53,69,0.9)';
+  el.style.color = 'white';
+}
+
+socket.on('connect', () => setStatus(true));
+socket.on('disconnect', () => setStatus(false));
+
+// Basic reconnect handling: socket.io will auto-reconnect, but we can show attempts
+socket.io.on('reconnect_attempt', () => {
+  const el = ensureConnIndicator();
+  el.textContent = 'Reconnecting...';
+  el.style.background = 'rgba(255,193,7,0.9)';
 });
