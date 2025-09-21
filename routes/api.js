@@ -74,7 +74,7 @@ const muted_devices = [
         const insertSql = `INSERT INTO \`${tableName}\` (CAMPUS, LOCATION, DATE, TIME, TEMP, HUMIDITY, ROOM, TYPE) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
         await db.query(insertSql, [Campus, Location, date, time, offsetTemp, humidity, Room, Type]);
 
-        // Check alarms
+        // Check alarm
         const [alarms] = await db.query("SELECT * FROM alarms");
         for (const alarm of alarms) {
           if (parseFloat(temp) >= parseFloat(alarm.TEMP)) {
