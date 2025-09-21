@@ -75,7 +75,17 @@ app.use("/admin", requireLogin, adminRouter);
 
 // Initialize Socket.IO using socketManager and start auto-refresh events
 const io = socketManager.init(server);
-socketManager.startAutoRefresh(5000);
+const dashboardData = require('./utils/dashboardData');
+
+// emit dashboard updates to connected clients
+setInterval(async () => {
+  try {
+    const payload = await dashboardData.getDashboardData();
+    io.emit('dashboard:update', payload);
+  } catch (err) {
+    console.error('Error generating dashboard payload', err);
+  }
+}, 5000);
 
 // Start server
 server.listen(PORT, () => {

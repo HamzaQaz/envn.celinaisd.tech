@@ -29,80 +29,22 @@ router.use((req, res, next) => {
 });
 
 
-router.get("/", async (req, res) => {
-  const filter = req.query.filter || "";
+const dashboardData = require('../utils/dashboardData');
 
+router.get('/', async (req, res) => {
   try {
-    const [devices] = await db.query(
-      "SELECT * FROM devices ORDER BY CAMPUS, LOCATION"
-    );
-    const [locations] = await db.query("SELECT * FROM locations ORDER BY ID");
-
-    
-    const deviceDataPromises = devices.map(async (device) => {
-      
-      const tableName = device.Name.replace(/[^a-zA-Z0-9_]/g, "");
-      const [latestReading] = await db.query(
-        `SELECT * FROM \`${tableName}\` ORDER BY id DESC LIMIT 1`
-      );
-      
-     
-      
-      
-
-     Status = latestReading.length && latestReading[0].HUMIDITY > "55" && latestReading[0].TEMP > "70" ? "alert" : "normal"
-     if (Status === "alert") {
-      if (alerts.length === 0 ){
-        alerts.push(tableName)
-        console.log(alerts)
-      } else {
-        if (Status === "normal") {
-          alerts.pop(tableName)
-        }
-      }
-     }
-
-      if (
-        !filter ||
-        (latestReading.length > 0 && latestReading[0].CAMPUS === filter)
-      ) {
-        return {
-          ...device, 
-          temp: latestReading.length ? latestReading[0].TEMP : "NaN",
-          location: latestReading.length ? latestReading[0].LOCATION : "Unknown Location",
-          campus: latestReading.length ? latestReading[0].CAMPUS : "N/A",
-          humidity: latestReading.length ? latestReading[0].HUMIDITY : "NaN",
-          room: latestReading.length ? latestReading[0].ROOM : "Unknown Room Location",
-          status: Status,
-          type: latestReading.length ? latestReading[0].TYPE : "Not Specified",
-          time: latestReading.length
-            ? timeago.format(new Date(
-                latestReading[0].DATE + "T" + latestReading[0].TIME
-              ))
-            : "N/A",
-          date: latestReading.length
-            ? new Date(latestReading[0].DATE).toLocaleDateString("en-US")
-            : "N/A",
-        };
-      }
-      return null;
-    });
-
-    const deviceData = (await Promise.all(deviceDataPromises)).filter(
-      (d) => d !== null
-    );
-
-    res.render("index", {
-      title: "Temperature Alarms",
-      deviceData,
-      locations,
-      alerts,
-      filter
-      
+    const filter = req.query.filter || '';
+    const payload = await dashboardData.getDashboardData(filter);
+    res.render('index', {
+      title: 'Temperature Alarms',
+      deviceData: payload.deviceData,
+      locations: payload.locations,
+      alerts: payload.alerts,
+      filter: payload.filter,
     });
   } catch (err) {
     console.error(err);
-    res.status(500).send("Database error on the main page.");
+    res.status(500).send('Database error on the main page.');
   }
 });
 

@@ -6,10 +6,94 @@ socket.on('connect', () => {
 });
 
 // Simple strategy: server will emit 'refresh' to signal clients to update
-socket.on('refresh', (payload) => {
-  console.log('Refresh event received', payload);
-  // Full page reload for now to keep client logic simple and reliable
-  location.reload();
+// New strategy: server sends full dashboard payload and client patches DOM
+socket.on('dashboard:update', (payload) => {
+  try {
+    // Update summary
+    if (payload.summary) {
+      const s = payload.summary;
+      const totalEl = document.getElementById('summary-total-locations');
+      const alertsEl = document.getElementById('summary-active-alerts');
+      const avgTempEl = document.getElementById('summary-avg-temp');
+      const avgHumEl = document.getElementById('summary-avg-humidity');
+      if (totalEl) totalEl.textContent = s.totalLocations;
+      if (alertsEl) alertsEl.textContent = s.activeAlerts;
+      if (avgTempEl) avgTempEl.textContent = s.avgTemp + '°F';
+      if (avgHumEl) avgHumEl.textContent = s.avgHumidity + '%';
+    }
+
+    // Update device cards
+    if (payload.deviceData) {
+      const container = document.getElementById('device-cards');
+      if (!container) return;
+
+      const existing = Array.from(container.querySelectorAll('.device-card'));
+      const mapExisting = new Map(existing.map(el => [el.getAttribute('data-name'), el]));
+
+      // Add or update cards
+      payload.deviceData.forEach(device => {
+        const key = device.Name;
+        const existingEl = mapExisting.get(key);
+        if (existingEl) {
+          // update values in-place
+          const tempEl = existingEl.querySelector('.temp-el');
+          const humEl = existingEl.querySelector('.humidity-el');
+          const timeEl = existingEl.querySelector('.time-el');
+          const statusEl = existingEl.querySelector('.status-badge-el');
+          const locSub = existingEl.querySelector('.location-sub');
+          if (tempEl) tempEl.textContent = device.temp + '°F';
+          if (humEl) humEl.textContent = device.humidity + '%';
+          if (timeEl) timeEl.textContent = device.time;
+          if (statusEl) {
+            statusEl.textContent = device.status === 'alert' ? 'Alert' : 'Normal';
+            statusEl.className = 'status-badge ' + device.status + ' status-badge-el';
+          }
+          if (locSub) locSub.textContent = device.location + ' (' + device.campus + ')';
+          mapExisting.delete(key);
+        } else {
+          // create new card element (simple HTML snippet)
+          const col = document.createElement('div');
+          col.className = 'col-md-6 mb-4 device-card';
+          col.setAttribute('data-name', device.Name);
+          col.innerHTML = `
+            <div class="card location-card ${device.status === 'alert' ? 'alert-blink' : ''}">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div>
+                  <h6 class="location-title"><h6 class="location-title">${device.room}</h6></h6>
+                  <small class="text-muted location-sub">${device.location} (${device.campus})</small>
+                </div>
+                <span class="status-badge ${device.status} status-badge-el">${device.status === 'alert' ? 'Alert' : 'Normal'}</span>
+              </div>
+              <div class="location-details mb-2">
+                <span class="location-type"><td><span class="badge ${device.type === 'MDF' ? 'bg-primary' : 'bg-secondary'}">${device.type}</span></td></span>
+              </div>
+              <div class="metric-row">
+                <div class="metric-icon"><i class="fas fa-thermometer-half"></i></div>
+                <span>Temperature</span>
+                <span class="metric-value temp-el">${device.temp}°F</span>
+              </div>
+              <div class="metric-row">
+                <div class="metric-icon"><i class="fas fa-tint"></i></div>
+                <span>Humidity</span>
+                <span class="metric-value humidity-el">${device.humidity}%</span>
+              </div>
+              <div class="metric-row">
+                <div class="metric-icon"><i class="fas fa-clock"></i></div>
+                <span>Last Updated</span>
+                <span class="metric-value time-el">${device.time}</span>
+              </div>
+            </div>
+          `;
+          container.prepend(col);
+        }
+      });
+
+      // Remove cards not present anymore
+      mapExisting.forEach((el, name) => el.remove());
+    }
+  } catch (err) {
+    console.error('Error applying dashboard update', err);
+  }
 });
 
 socket.on('disconnect', () => {

@@ -1,22 +1,6 @@
 const { Server } = require('socket.io');
 let io;
-let refreshInterval;
-
-function startAutoRefresh(intervalMs = 5000) {
-    if (!io) throw new Error('Socket.IO not initialized');
-    stopAutoRefresh();
-    refreshInterval = setInterval(() => {
-        // Emit a lightweight refresh event. Payload can be extended later.
-        io.emit('refresh', { ts: Date.now() });
-    }, intervalMs);
-}
-
-function stopAutoRefresh() {
-    if (refreshInterval) {
-        clearInterval(refreshInterval);
-        refreshInterval = null;
-    }
-}
+// Note: dashboard updates are emitted by server.js using dashboardData
 
 module.exports = {
     init: (httpServer) => {
@@ -32,6 +16,5 @@ module.exports = {
         if (!io) throw new Error('Socket.IO not initialized!');
         return io;
     },
-    startAutoRefresh,
-    stopAutoRefresh,
+    // keep interface minimal
 };
