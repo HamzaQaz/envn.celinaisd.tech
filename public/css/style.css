@@ -40,10 +40,10 @@ body {
             font-size: 0.8rem;
         }
         .normal {
-            background-color: #e8f5e9;
-            text-transform: capitalize ;
-            font-weight: bold;
-            color: #87fd8d;
+            background-color: #4ffc57;
+            
+            
+            color: #e8f5e9;
         }
         .alert {
             background-color: #ff6a6a;
