@@ -9,6 +9,9 @@
 body {
             background-color: #f5f5f5;
         }
+        .alert-blink {
+            animation: alert-blink 1.5s linear infinite;
+        }
         .sidebar {
             background-color: white;
             height: 100vh;
@@ -28,8 +31,9 @@ body {
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.438);
             margin-bottom: 20px;
-            animation: alert-blink 1s infinite;
+            
         }
+
         .status-badge {
             padding: 5px 10px;
             border-radius: 15px;
