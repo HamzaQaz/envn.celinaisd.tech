@@ -116,7 +116,7 @@ socket.on('dashboard:full', (payload) => {
         col.className = 'col-md-6 mb-4 device-card';
         col.setAttribute('data-name', device.Name);
         col.innerHTML = `
-          <div class="card location-card status-blink-el">
+          <div class="card location-card ${device.status === 'alert' ? 'alert-blink' : ''}">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <div>
                 <h6 class="location-title"><h6 class="location-title">${device.room}</h6></h6>
@@ -215,7 +215,7 @@ socket.on('dashboard:diff', (diff) => {
         col.className = 'col-md-6 mb-4 device-card';
         col.setAttribute('data-name', device.Name);
         col.innerHTML = `
-          <div class="card location-card status-blink-el">
+          <div class="card location-card ${device.status === 'alert' ? 'alert-blink' : ''}">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <div>
                 <h6 class="location-title"><h6 class="location-title">${device.room}</h6></h6>
