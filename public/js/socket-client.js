@@ -40,6 +40,7 @@ socket.on('dashboard:update', (payload) => {
           const humEl = existingEl.querySelector('.humidity-el');
           const timeEl = existingEl.querySelector('.time-el');
           const statusEl = existingEl.querySelector('.status-badge-el');
+          const blinkEl = existingEl.querySelector('.status-blink-el')
           const locSub = existingEl.querySelector('.location-sub');
           if (tempEl) tempEl.textContent = device.temp + '°F';
           if (humEl) humEl.textContent = device.humidity + '%';
@@ -47,7 +48,13 @@ socket.on('dashboard:update', (payload) => {
           if (statusEl) {
             statusEl.textContent = device.status === 'alert' ? 'Alert' : 'Normal';
             statusEl.className = 'status-badge ' + device.status + ' status-badge-el';
+            
           }
+          if (blinkEl) {
+            const statusblink = device.status === 'alert' ? 'alert-blink' : ''
+            blinkEl.className = 'card location-card' + statusblink + 'status-blink-el'
+          }
+          
           if (locSub) locSub.textContent = device.location + ' (' + device.campus + ')';
           mapExisting.delete(key);
         } else {
