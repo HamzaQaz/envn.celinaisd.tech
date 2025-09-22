@@ -38,7 +38,7 @@
 						<h4>Dashboard</h4>
 						<div class="d-flex">
 							<div class="dropdown me-2">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="locationFilter" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="locationFilter" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-building me-1"></i> Celina High School
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="locationFilter">
@@ -210,6 +210,8 @@
 		<!-- Bootstrap JS Bundle with Popper is included in header.ejs -->
 		<!-- Socket.IO client + dashboard socket handler -->
 		<script src="/socket.io/socket.io.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 		<script src="/js/socket-client.js"></script>
 	</body>
 </html>
