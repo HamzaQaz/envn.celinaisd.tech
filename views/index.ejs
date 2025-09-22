@@ -1,174 +1,234 @@
-<%- include('partials/header', {title: title}) %>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<%- include('partials/header', {title: title}) %>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row">
+				<!-- Sidebar -->
+				<div class="col-md-2 sidebar">
+					<div class="d-flex align-items-center mb-4 ps-3">
+						<h5 class="mb-0">District Environment Monitor</h5>
+					</div>
+					<div class="sidebar-item active">
+						<a href="/" class="text-decoration-none text-dark">
+							<i class="fas fa-tachometer-alt me-2"></i> Dashboard
+						</a>
+					</div>
+					<div class="sidebar-item">
+						<a href="locations.html" class="text-decoration-none text-dark">
+							<i class="fas fa-map-marker-alt me-2"></i> Locations
+						</a>
+					</div>
+					<div class="sidebar-item">
+						<i class="fas fa-chart-line me-2"></i> Analytics
+					</div>
+					<div class="sidebar-item">
+						<a href="/admin" class="text-decoration-none text-dark">
+							<i class="fas fa-cog me-2"></i> Settings
+						</a>
+					</div>
+				</div>
 
+				<!-- Main Content -->
+				<div class="col-md-10 p-4">
+					<!-- Filter Controls -->
+					<div class="d-flex justify-content-between align-items-center mb-4">
+						<h4>Dashboard</h4>
+						<div class="d-flex">
+							<div class="dropdown me-2">
+								<button
+									class="btn btn-outline-secondary dropdown-toggle"
+									type="button"
+									id="locationFilter"
+									data-bs-toggle="dropdown"
+									aria-expanded="false"
+								>
+									<i class="fas fa-building me-1"></i> <%= locations.find(loc =>
+									loc.SHORTCODE === filter)?.NAME || "All Locations" %>
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="locationFilter">
+									<li>
+										<a
+											class="dropdown-item <%= filter === '' ? 'active' : '' %>"
+											href="/"
+											>All Locations</a
+										>
+									</li>
+									<% locations.forEach(loc => { %>
+									<li>
+										<a
+											class="dropdown-item <%= filter === loc.SHORTCODE ? 'active' : '' %>"
+											href="/?filter=<%= loc.SHORTCODE %>"
+										>
+											<%= loc.NAME %>
+										</a>
+									</li>
+									<% }); %>
+								</ul>
+							</div>
+							<div class="dropdown me-2">
+								<button
+									class="btn btn-outline-secondary dropdown-toggle"
+									type="button"
+									id="statusFilter"
+									data-bs-toggle="dropdown"
+									aria-expanded="false"
+								>
+									<i class="fas fa-filter me-1"></i> All Status
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="statusFilter">
+									<li>
+										<a class="dropdown-item active" href="#">All Status</a>
+									</li>
+									<li><a class="dropdown-item" href="#">Normal</a></li>
+									<li><a class="dropdown-item" href="#">Alert</a></li>
+								</ul>
+							</div>
+							<button
+								class="btn btn-outline-primary"
+								onclick="location.reload()"
+							>
+								<i class="fas fa-sync-alt me-1"></i> Refresh
+							</button>
+						</div>
+					</div>
 
-<body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-2 sidebar">
-                <div class="d-flex align-items-center mb-4 ps-3">
-                    
-                    <h5 class="mb-0">District Environment Monitor</h5>
-                </div>
-<div class="sidebar-item active">
-    <a href="/" class="text-decoration-none text-dark">
-        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
-    </a>
-</div>
-<div class="sidebar-item">
-    <a href="locations.html" class="text-decoration-none text-dark">
-        <i class="fas fa-map-marker-alt me-2"></i> Locations
-    </a>
-</div>
-                <div class="sidebar-item">
-                    <i class="fas fa-chart-line me-2"></i> Analytics
-                </div>
-                <div class="sidebar-item">
-                    <a href="/admin" class="text-decoration-none text-dark">
-        <i class="fas fa-cog me-2"></i> Settings
-    </a>
-                </div>
-            </div>
-            
-            <!-- Main Content -->
-            <div class="col-md-10 p-4">
-                <!-- Filter Controls -->
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4>Dashboard</h4>
-                    <div class="d-flex">
-                        <div class="dropdown me-2">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="locationFilter" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-building me-1"></i> <%= locations.find(loc => loc.SHORTCODE === filter)?.NAME || "All Locations" %>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="locationFilter">
-  <li>
-    <a class="dropdown-item <%= filter === '' ? 'active' : '' %>" href="/">All Locations</a>
-  </li>
-  <% locations.forEach(loc => { %>
-    <li>
-      <a class="dropdown-item <%= filter === loc.SHORTCODE ? 'active' : '' %>" href="/?filter=<%= loc.SHORTCODE %>">
-        <%= loc.NAME %>
-      </a>
-    </li>
-  <% }); %>
-</ul>
-                        </div>
-                        <div class="dropdown me-2">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="statusFilter" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-filter me-1"></i> All Status
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="statusFilter">
-                                <li><a class="dropdown-item active" href="#">All Status</a></li>
-                                <li><a class="dropdown-item" href="#">Normal</a></li>
-                                <li><a class="dropdown-item" href="#">Alert</a></li>
-                            </ul>
-                        </div>
-                       <button class="btn btn-outline-primary" onclick="location.reload()">
-  <i class="fas fa-sync-alt me-1"></i> Refresh
-</button>
-                    </div>
-                </div>
-                
-        <!-- Summary Cards -->
-        <div class="row mb-4" id="summary-cards">
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body d-flex justify-content-between align-items-center">
-                                <div>
-                                    <p class="text-muted mb-0">Total Locations</p>
-                   <h2 class="mb-0" id="summary-total-locations"><%= locations.length %></h2>
-                                </div>
-                                <i class="fas fa-building header-icon"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body d-flex justify-content-between align-items-center">
-                                <div>
-                                    <p class="text-muted mb-0">Active Alerts</p>
-                  <h2 class="mb-0" id="summary-active-alerts"><%= alerts.length %></h2>
-                                </div>
-                                <i class="fas fa-exclamation-triangle header-icon text-warning"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body d-flex justify-content-between align-items-center">
-                                <div>
-                                    <p class="text-muted mb-0">Avg Temperature</p>
-                  <h2 class="mb-0" id="summary-avg-temp">75°F</h2>
-                                </div>
-                                <i class="fas fa-thermometer-half header-icon"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body d-flex justify-content-between align-items-center">
-                                <div>
-                                    <p class="text-muted mb-0">Avg Humidity</p>
-                  <h2 class="mb-0" id="summary-avg-humidity">75%</h2>
-                                </div>
-                                <i class="fas fa-tint header-icon"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Location Cards -->
-                <div class="row" id="device-cards">
-  <% deviceData.forEach(device => { %>
-    <div class="col-md-6 mb-4 device-card" data-name="<%= device.Name %>">
-      <div class="card location-card <%= device.status === `alert` ? `alert-blink` : `` %>">
-        <div class="d-flex justify-content-between align-items-center mb-1">
-          <div>
-            <h6 class="location-title"><h6 class="location-title"><%= device.room %></h6></h6>
-            <small class="text-muted location-sub"><%= device.location %> (<%= device.campus %>)</small>
-          </div>
-          
-          <span class="status-badge <%= device.status %> status-badge-el">
-            <%= device.status === "alert" ? "Alert" : "Normal" %>
-          </span>
-        </div>
-        <div class="location-details mb-2">
-          <span class="location-type"><td><span class="badge <%= device.type === 'MDF' ? 'bg-primary' : 'bg-secondary' %>"><%= device.type %></span></td></span>
-        </div>
-        <div class="metric-row">
-          <div class="metric-icon">
-            <i class="fas fa-thermometer-half"></i>
-          </div>
-          <span>Temperature</span>
-          <span class="metric-value temp-el"><%= device.temp %>°F</span>
-        </div>
-        <div class="metric-row">
-          <div class="metric-icon">
-            <i class="fas fa-tint"></i>
-          </div>
-          <span>Humidity</span>
-          <span class="metric-value humidity-el">
-            <%= device.humidity %>%
-          </span>
-        </div>
-        <div class="metric-row">
-          <div class="metric-icon">
-            <i class="fas fa-clock"></i>
-          </div>
-          <span>Last Updated</span>
-          <span class="metric-value time-el"><%= device.time %></span>
-        </div>
-      </div>
-    </div>
-  <%  }); %>
-</div>
-            </div>
-        </div>
-    </div>
+					<!-- Summary Cards -->
+					<div class="row mb-4" id="summary-cards">
+						<div class="col-md-3">
+							<div class="card">
+								<div
+									class="card-body d-flex justify-content-between align-items-center"
+								>
+									<div>
+										<p class="text-muted mb-0">Total Locations</p>
+										<h2 class="mb-0" id="summary-total-locations">
+											<%= locations.length %>
+										</h2>
+									</div>
+									<i class="fas fa-building header-icon"></i>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="card">
+								<div
+									class="card-body d-flex justify-content-between align-items-center"
+								>
+									<div>
+										<p class="text-muted mb-0">Active Alerts</p>
+										<h2 class="mb-0" id="summary-active-alerts">
+											<%= alerts.length %>
+										</h2>
+									</div>
+									<i
+										class="fas fa-exclamation-triangle header-icon text-warning"
+									></i>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="card">
+								<div
+									class="card-body d-flex justify-content-between align-items-center"
+								>
+									<div>
+										<p class="text-muted mb-0">Avg Temperature</p>
+										<h2 class="mb-0" id="summary-avg-temp">75°F</h2>
+									</div>
+									<i class="fas fa-thermometer-half header-icon"></i>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="card">
+								<div
+									class="card-body d-flex justify-content-between align-items-center"
+								>
+									<div>
+										<p class="text-muted mb-0">Avg Humidity</p>
+										<h2 class="mb-0" id="summary-avg-humidity">75%</h2>
+									</div>
+									<i class="fas fa-tint header-icon"></i>
+								</div>
+							</div>
+						</div>
+					</div>
 
-  <!-- Bootstrap JS Bundle with Popper is included in header.ejs -->
-    <!-- Socket.IO client + dashboard socket handler -->
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/socket-client.js"></script>
-</body>
+					<!-- Location Cards -->
+					<div class="row" id="device-cards">
+						<% deviceData.forEach(device => { %>
+						<div
+							class="col-md-6 mb-4 device-card"
+							data-name="<%= device.Name %>"
+						>
+							<div
+								class="card location-card <%= device.status === `alert` ? `alert-blink` : `` %>"
+							>
+								<div
+									class="d-flex justify-content-between align-items-center mb-1"
+								>
+									<div>
+										<h6 class="location-title">
+											<h6 class="location-title"><%= device.room %></h6>
+										</h6>
+										<small class="text-muted location-sub"
+											><%= device.location %> (<%= device.campus %>)</small
+										>
+									</div>
+
+									<span
+										class="status-badge <%= device.status %> status-badge-el"
+									>
+										<%= device.status === "alert" ? "Alert" : "Normal" %>
+									</span>
+								</div>
+								<div class="location-details mb-2">
+									<span class="location-type"
+										><td>
+											<span
+												class="badge <%= device.type === 'MDF' ? 'bg-primary' : 'bg-secondary' %>"
+												><%= device.type %></span
+											>
+										</td></span
+									>
+								</div>
+								<div class="metric-row">
+									<div class="metric-icon">
+										<i class="fas fa-thermometer-half"></i>
+									</div>
+									<span>Temperature</span>
+									<span class="metric-value temp-el"><%= device.temp %>°F</span>
+								</div>
+								<div class="metric-row">
+									<div class="metric-icon">
+										<i class="fas fa-tint"></i>
+									</div>
+									<span>Humidity</span>
+									<span class="metric-value humidity-el">
+										<%= device.humidity %>%
+									</span>
+								</div>
+								<div class="metric-row">
+									<div class="metric-icon">
+										<i class="fas fa-clock"></i>
+									</div>
+									<span>Last Updated</span>
+									<span class="metric-value time-el"><%= device.time %></span>
+								</div>
+							</div>
+						</div>
+						<% }); %>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Bootstrap JS Bundle with Popper is included in header.ejs -->
+		<!-- Socket.IO client + dashboard socket handler -->
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="/js/socket-client.js"></script>
+	</body>
 </html>
