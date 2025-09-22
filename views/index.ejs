@@ -38,17 +38,18 @@
 						<h4>Dashboard</h4>
 						<div class="d-flex">
 							<div class="dropdown me-2">
-								<button
-									class="btn btn-outline-secondary dropdown-toggle"
-									type="button"
-									id="locationFilter"
-									data-bs-toggle="dropdown"
-									aria-expanded="false"
-								>
-									<i class="fas fa-building me-1"></i> <%= locations.find(loc =>
-									loc.SHORTCODE === filter)?.NAME || "All Locations" %>
-								</button>
-								<ul class="dropdown-menu" aria-labelledby="locationFilter">
+									<div class="dropdown">
+										<button
+											class="btn btn-outline-secondary dropdown-toggle"
+											type="button"
+											id="locationFilter"
+											data-bs-toggle="dropdown"
+											aria-expanded="false"
+										>
+											<i class="fas fa-building me-1"></i> <%= locations.find(loc =>
+											loc.SHORTCODE === filter)?.NAME || "All Locations" %>
+										</button>
+										<ul class="dropdown-menu" aria-labelledby="locationFilter">
 									<li>
 										<a
 											class="dropdown-item <%= filter === '' ? 'active' : '' %>"
@@ -66,25 +67,28 @@
 										</a>
 									</li>
 									<% }); %>
-								</ul>
+										</ul>
+									</div>
 							</div>
 							<div class="dropdown me-2">
-								<button
-									class="btn btn-outline-secondary dropdown-toggle"
-									type="button"
-									id="statusFilter"
-									data-bs-toggle="dropdown"
-									aria-expanded="false"
-								>
-									<i class="fas fa-filter me-1"></i> All Status
-								</button>
-								<ul class="dropdown-menu" aria-labelledby="statusFilter">
+									<div class="dropdown">
+										<button
+											class="btn btn-outline-secondary dropdown-toggle"
+											type="button"
+											id="statusFilter"
+											data-bs-toggle="dropdown"
+											aria-expanded="false"
+										>
+											<i class="fas fa-filter me-1"></i> All Status
+										</button>
+										<ul class="dropdown-menu" aria-labelledby="statusFilter">
 									<li>
 										<a class="dropdown-item active" href="#">All Status</a>
 									</li>
 									<li><a class="dropdown-item" href="#">Normal</a></li>
 									<li><a class="dropdown-item" href="#">Alert</a></li>
-								</ul>
+										</ul>
+									</div>
 							</div>
 							<button
 								class="btn btn-outline-primary"
