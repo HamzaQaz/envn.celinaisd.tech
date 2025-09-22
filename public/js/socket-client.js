@@ -63,7 +63,7 @@ socket.on('dashboard:update', (payload) => {
           col.className = 'col-md-6 mb-4 device-card';
           col.setAttribute('data-name', device.Name);
           col.innerHTML = `
-            <div class="card location-card ${device.status === 'alert' ? 'alert-blink' : ''}">
+            <div class="card location-card status-blink-el">
               <div class="d-flex justify-content-between align-items-center mb-2">
                 <div>
                   <h6 class="location-title"><h6 class="location-title">${device.room}</h6></h6>
@@ -116,7 +116,7 @@ socket.on('dashboard:full', (payload) => {
         col.className = 'col-md-6 mb-4 device-card';
         col.setAttribute('data-name', device.Name);
         col.innerHTML = `
-          <div class="card location-card ${device.status === 'alert' ? 'alert-blink' : ''}">
+          <div class="card location-card status-blink-el">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <div>
                 <h6 class="location-title"><h6 class="location-title">${device.room}</h6></h6>
@@ -191,6 +191,7 @@ socket.on('dashboard:diff', (diff) => {
         const humEl = el.querySelector('.humidity-el');
         const timeEl = el.querySelector('.time-el');
         const statusEl = el.querySelector('.status-badge-el');
+        const blinkEl = el.querySelector('.status-blink-el')
         const locSub = el.querySelector('.location-sub');
         if (tempEl) tempEl.textContent = device.temp + '°F';
         if (humEl) humEl.textContent = device.humidity + '%';
@@ -199,6 +200,10 @@ socket.on('dashboard:diff', (diff) => {
           statusEl.textContent = device.status === 'alert' ? 'Alert' : 'Normal';
           statusEl.className = 'status-badge ' + device.status + ' status-badge-el';
         }
+        if (blinkEl) {
+            const statusblink = device.status === 'alert' ? 'alert-blink' : ''
+            blinkEl.className = 'card location-card' + statusblink + 'status-blink-el'
+          }
         if (locSub) locSub.textContent = device.location + ' (' + device.campus + ')';
       });
     }
