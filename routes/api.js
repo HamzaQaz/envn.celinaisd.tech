@@ -111,6 +111,29 @@ const muted_devices = [
         res.status(200).send(stdout);
       });
 
+
+  const API_TOKEN = process.env.API_TOKEN || "supersecrettoken"; // Store your token securely!
+
+router.post('/consolecmd', (req, res) => {
+  // Simple header-based auth
+  const authHeader = req.headers['authorization'];
+  if (!authHeader || authHeader !== `Bearer ${API_TOKEN}`) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const { cmd } = req.body;
+  if (!cmd || typeof cmd !== 'string') {
+    return res.status(400).json({ error: 'Missing or invalid "cmd" in request body.' });
+  }
+
+  exec(cmd, (error, stdout, stderr) => {
+    if (error) {
+      return res.status(500).json({ error: error.message, stderr });
+    }
+    res.json({ stdout, stderr });
+  });
+});
+
       
 
       
