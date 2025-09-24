@@ -112,5 +112,19 @@ const muted_devices = [
       
     
   });
+  router.post("/logs", (req, res) => {
+    
+      exec('pm2 logs 0 -lines 50', (err, stdout, stderr) => {
+        if (err) {
+          console.error('log pull failed')
+          return res.status(500).send('log pull failed')
+        }
+        
+        res.status(200).send(stdout);
+      });
+
+      
+    
+  });
 
   module.exports = router;
