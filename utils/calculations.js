@@ -10,7 +10,7 @@ const customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 
 /**
- * Parse and analyze a sensor reading
+ * Parse and analyze a sensor readin
  */
 function analyzeReading(reading, thresholdMinutes = 2) {
   const now = dayjs();
