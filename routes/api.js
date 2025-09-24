@@ -99,23 +99,17 @@ const muted_devices = [
   });
 
   router.post("/webhook", (req, res) => {
+    const { logs } = req.body
     
       exec('git -C /root/envn.celinaisd.tech pull origin main', (err, stdout, stderr) => {
         if (err) {
           console.error('Git pull failed', stderr)
           return res.status(500).send('Git pull failed')
         }
-        console.log('Git pull output', stdout);
-        res.status(200).send(stdout);
-      });
-
-      
+        if (logs === "true") {
+          
     
-  });
-  router.post("/log", (req, res) => {
-      const { lines } = req.body
-    
-      exec(`pm2 logs 0 --lines ${lines} --json`, (err, stdout, stderr) => {
+      exec(`pm2 logs 0 --lines 5 --json`, (err, stdout, stderr) => {
         if (err) {
           console.error('log pull failed')
           return res.status(500).send('log pull failed')
@@ -123,9 +117,16 @@ const muted_devices = [
         
         res.status(200).send(stdout);
       });
+        }
+        console.log('Git pull output', stdout);
+        res.status(200).send(stdout);
+      });
+
+      
 
       
     
   });
+ 
 
   module.exports = router;
