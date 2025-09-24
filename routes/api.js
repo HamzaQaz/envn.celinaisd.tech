@@ -107,11 +107,19 @@ const muted_devices = [
           return res.status(500).send('Git pull failed')
         }
         
+        
         console.log('Git pull output', stdout);
         res.status(200).send(stdout);
       });
 
 
+  
+
+      
+
+      
+    
+  });
   const API_TOKEN = process.env.API_TOKEN || "testapi101"; // Store your token securely!
 
 router.post('/console', (req, res) => {
@@ -133,12 +141,6 @@ router.post('/console', (req, res) => {
     res.json({ stdout, stderr });
   });
 });
-
-      
-
-      
-    
-  });
  
 
   module.exports = router;
