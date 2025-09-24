@@ -120,27 +120,7 @@ const muted_devices = [
       
     
   });
-  const API_TOKEN = process.env.API_TOKEN || "testapi101"; // Store your token securely!
-
-router.post('/console', (req, res) => {
-  // Simple header-based auth
-  const authHeader = req.headers['authorization'];
-  if (!authHeader || authHeader !== `Bearer ${API_TOKEN}`) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
-  const { cmd } = req.body;
-  if (!cmd || typeof cmd !== 'string') {
-    return res.status(400).json({ error: 'Missing or invalid "cmd" in request body.' });
-  }
-
-  exec(cmd, (error, stdout, stderr) => {
-    if (error) {
-      return res.status(500).json({ error: error.message, stderr });
-    }
-    res.json({ stdout, stderr });
-  });
-});
+  
  
 
   module.exports = router;
