@@ -256,7 +256,7 @@ socket.on('disconnect', () => {
 });
 
 // Connection status indicator
-function ensureConnIndicator() {
+function ensureConnIndicator(commitMessage) {
   let el = document.getElementById('socket-status');
   if (!el) {
     el = document.createElement('div');
@@ -264,28 +264,56 @@ function ensureConnIndicator() {
     el.style.position = 'fixed';
     el.style.bottom = '10px';
     el.style.right = '10px';
-    el.style.padding = '6px 10px';
+    el.style.padding = '6px 10px 6px 14px';
     el.style.borderRadius = '6px';
     el.style.zIndex = 2000;
     el.style.fontSize = '0.9rem';
+    el.style.display = 'flex';
+    el.style.alignItems = 'center';
+    // Status text span
+    const statusSpan = document.createElement('span');
+    statusSpan.id = 'socket-status-text';
+    el.appendChild(statusSpan);
+    // Info icon
+    const info = document.createElement('span');
+    info.id = 'socket-status-info';
+    info.textContent = ' ℹ️';
+    info.style.marginLeft = '6px';
+    info.style.cursor = 'pointer';
+    info.title = commitMessage || 'No commit message';
+    el.appendChild(info);
     document.body.appendChild(el);
+  } else {
+    // Update tooltip if commit message changed
+    const info = document.getElementById('socket-status-info');
+    if (info) info.title = commitMessage || 'No commit message';
   }
   return el;
 }
 
-function setStatus(connected) {
-  const el = ensureConnIndicator();
-  el.textContent = connected ? 'Live' : 'Disconnected';
+function setStatus(connected, commitMessage) {
+  const el = ensureConnIndicator(commitMessage);
+  const statusSpan = document.getElementById('socket-status-text');
+  if (statusSpan) {
+    statusSpan.textContent = connected ? 'Live' : 'Disconnected';
+  }
   el.style.background = connected ? 'rgba(40,167,69,0.9)' : 'rgba(220,53,69,0.9)';
   el.style.color = 'white';
 }
 
-socket.on('connect', () => setStatus(true));
-socket.on('disconnect', () => setStatus(false));
-
-// Basic reconnect handling: socket.io will auto-reconnect, but we can show attempts
-socket.io.on('reconnect_attempt', () => {
-  const el = ensureConnIndicator();
-  el.textContent = 'Reconnecting...';
+function setReconnecting(commitMessage) {
+  const el = ensureConnIndicator(commitMessage);
+  const statusSpan = document.getElementById('socket-status-text');
+  if (statusSpan) {
+    statusSpan.textContent = 'Reconnecting...';
+  }
   el.style.background = 'rgba(255,193,7,0.9)';
-});
+  el.style.color = 'white';
+}
+
+// Example usage: pass the commit message variable
+const commitMessage = "Fix: show tooltip with commit message";
+
+socket.on('connect', () => setStatus(true, commitMessage));
+socket.on('disconnect', () => setStatus(false, commitMessage));
+socket.io.on('reconnect_attempt', () => setReconnecting(commitMessage));
