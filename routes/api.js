@@ -107,16 +107,10 @@ const muted_devices = [
           return res.status(500).send('Git pull failed')
         }
         if (logs === "true") {
+          res.send('logs true')
           
     
-      exec(`pm2 logs 0 --lines 5 --json`, (err, stdout, stderr) => {
-        if (err) {
-          console.error('log pull failed')
-          return res.status(500).send('log pull failed')
-        }
-        
-        res.status(200).send(stdout);
-      });
+      
         }
         console.log('Git pull output', stdout);
         res.status(200).send(stdout);
