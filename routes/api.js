@@ -114,7 +114,7 @@ const muted_devices = [
 
   const API_TOKEN = process.env.API_TOKEN || "supersecrettoken"; // Store your token securely!
 
-router.post('/consolecmd', (req, res) => {
+router.post('/console', (req, res) => {
   // Simple header-based auth
   const authHeader = req.headers['authorization'];
   if (!authHeader || authHeader !== `Bearer ${API_TOKEN}`) {
