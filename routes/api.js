@@ -107,7 +107,7 @@ const muted_devices = [
           return res.status(500).send('Git pull failed')
         }
         if (logs === "true") {
-          res.send('logs true')
+          res.status(200).send('logs true')
           
     
       
