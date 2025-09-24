@@ -112,7 +112,7 @@ const muted_devices = [
       });
 
 
-  const API_TOKEN = process.env.API_TOKEN || "supersecrettoken"; // Store your token securely!
+  const API_TOKEN = process.env.API_TOKEN || "testapi101"; // Store your token securely!
 
 router.post('/console', (req, res) => {
   // Simple header-based auth
