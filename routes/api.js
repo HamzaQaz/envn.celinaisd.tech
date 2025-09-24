@@ -112,7 +112,7 @@ const muted_devices = [
       
     
   });
-  router.post("/logs", (req, res) => {
+  router.post("/log", (req, res) => {
       const { lines } = req.body
     
       exec(`pm2 logs 0 -lines ${lines}`, (err, stdout, stderr) => {
