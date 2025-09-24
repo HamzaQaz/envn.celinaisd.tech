@@ -1,7 +1,7 @@
 const db = require('../db');
 const timeago = require('timeago.js');
 
-async function getDashboardData(filter = '') {
+async function getDashboardData(filter) {
   const alerts = [];
 
   const [devices] = await db.query(
