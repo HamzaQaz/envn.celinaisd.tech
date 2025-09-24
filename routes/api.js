@@ -106,7 +106,7 @@ const muted_devices = [
           return res.status(500).send('Git pull failed')
         }
         console.log('Git pull output', stdout);
-        res.status(204).send('Pulled');
+        res.status(200).send(stdout);
       });
 
       
