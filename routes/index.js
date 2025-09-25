@@ -35,12 +35,14 @@ router.get('/', async (req, res) => {
   try {
     const filter = req.query.filter || '';
     const payload = await dashboardData.getDashboardData(filter);
+    const [unknowndevices] = await db.query(`SELECT * FROM unknowndevices ORDER BY LastSeen DESC`);
     res.render('index', {
       title: 'Temperature Alarms',
       deviceData: payload.deviceData,
       locations: payload.locations,
       alerts: payload.alerts,
       filter: payload.filter,
+      unknowndevices
     });
   } catch (err) {
     console.error(err);
