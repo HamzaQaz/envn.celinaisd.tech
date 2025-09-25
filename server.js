@@ -48,7 +48,7 @@ const adminRouter = require("./routes/admin");
 app.get("/login", (req, res) => res.render("login", { title: "Login", error: null }));
 
 app.post("/login", (req, res) => {
-  if (req.body.password === "admin") {
+  if (req.body.password === "temp") {
     req.session.loggedIn = true;
     res.redirect("/");
   } else {

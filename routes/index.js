@@ -11,7 +11,7 @@ router.get("/login", (req, res) =>
   res.render("login", { title: "Login", error: null })
 );
 router.post("/login", (req, res) => {
-  if (req.body.password === "admin") {
+  if (req.body.password === "temp") {
     req.session.loggedIn = true;
     res.redirect("/");
   } else {
