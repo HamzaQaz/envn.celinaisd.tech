@@ -277,7 +277,7 @@ function ensureConnIndicator(commitMessage) {
     // Info icon
     const info = document.createElement('span');
     info.id = 'socket-status-info';
-    info.textContent = ' ℹ️';
+    info.textContent = '<i class="fa-solid fa-circle-info"></i>';
     info.style.marginLeft = '6px';
     info.style.cursor = 'pointer';
     info.title = commitMessage || 'No commit message';
