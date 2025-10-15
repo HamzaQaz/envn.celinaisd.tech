@@ -36,6 +36,7 @@ router.get("/", async (req, res) => {
 
 
 
+
 router.post("/device/add", async (req, res) => {
   const { name, campus, location, type, room } = req.body;
 
