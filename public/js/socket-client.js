@@ -109,7 +109,7 @@ socket.on('dashboard:full', (payload) => {
     // reuse same update logic by wrapping into a diff that replaces everything
     // clear container then render all devices
     const container = document.getElementById('device-cards');
-    if (containr && payload.deviceData) {
+    if (container && payload.deviceData) {
       container.innerHTML = '';
       payload.deviceData.forEach(device => {
         const col = document.createElement('div');
