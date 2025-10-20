@@ -109,6 +109,7 @@ const muted_devices = [
         
         
         console.log('Git pull output', stdout);
+        console.log('Restarting server...');
         res.status(200).send(stdout);
       });
 
