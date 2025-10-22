@@ -17,7 +17,7 @@ const { exec } = require('child_process'); // child
   });
 
 const muted_devices = [
-    "ESP_21A8EB",
+    "ESP_TESTAPI",
     "ESP_7C28E8",
     "ESP_0DF2C4"
 ]
