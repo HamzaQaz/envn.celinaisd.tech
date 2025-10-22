@@ -17,9 +17,8 @@ const { exec } = require('child_process'); // child
   });
 
 const muted_devices = [
-    "ESP_TESTAPI",
-    "ESP_7C28E8",
-    "ESP_0DF2C4"
+    "ESP_TESTAPI"
+    
 ]
 
   router.post("/write", async (req, res) => {
