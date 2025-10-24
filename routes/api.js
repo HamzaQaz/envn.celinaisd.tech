@@ -17,7 +17,7 @@ const { exec } = require('child_process'); // child
   });
 
 const muted_devices = [
-    "ESP_TESTAPI"
+    "ESP_TEST9API"
     
 ]
 
@@ -25,14 +25,11 @@ const muted_devices = [
     const { table, temp, humidity, mac, ip } = req.body;
     if (table === muted_devices) {
         return res.status(400).send("This device has been temporaliy muted for testing.")
-        
+           
     }
-    if (temp === "NaN" && humidity === "NaN") {
-	temp = 400
-	humidity = 400
-	
-    }
-    if (!table || !temp || !humidity) {
+  
+    
+    if (!table || !temp || !humidity || !mac || !ip) {
       return res.status(400).send("Missing 'table', 'temp', or 'humidity' query parameter.");
     }
 
