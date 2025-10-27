@@ -68,8 +68,8 @@ function requireLogin(req, res, next) {
 }
 app.use("/api", apiRouter); // open
 app.use("/", requireLogin, indexRouter);
-app.use("/settings", requireLogin, adminRouter);
-app.use('/admin', express.static(path.join(__dirname, 'calculator-ti-84')));
+app.use("/admin", requireLogin, adminRouter);
+
 
 
 
