@@ -44,7 +44,7 @@ socket.on('dashboard:update', (payload) => {
           const locSub = existingEl.querySelector('.location-sub');
           if (tempEl) tempEl.textContent = device.temp + '°F';
           if (humEl) humEl.textContent = device.humidity + '%';
-          if (timeEl) timeEl.textContent = device.time;
+          if (timeEl) timeEl.textContent = device.time;8
           if (statusEl) {
             statusEl.textContent = device.status === 'alert' ? 'Alert' : 'Normal';
             statusEl.className = 'status-badge ' + device.status + ' status-badge-el';
