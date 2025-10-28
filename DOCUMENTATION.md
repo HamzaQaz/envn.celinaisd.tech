@@ -323,7 +323,7 @@ TROUBLESHOOTING.md#ssl-certificate-issues
 ## 📊 Document Statistics
 
 | Document | Purpose | Pages | Skill Level | Time to Read |
-|----------|---------|-------|-------------|--------------|
+|:---------|:--------|:-----:|:-----------:|:------------:|
 | PRE-DEPLOYMENT.md | Checklist | ~5 | All | 10 min |
 | DNS-SETUP.md | DNS Config | ~6 | All | 15 min |
 | QUICKSTART.md | Fast Deploy | ~3 | Intermediate+ | 5 min |
