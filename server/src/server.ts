@@ -120,16 +120,16 @@ setInterval(async () => {
 
     const removed: string[] = [];
     for (const [name] of prevMap) {
-      if (!currMap.has(name)) removed.push(name);
+      if (!currMap.has(name)) removed.push(String(name));
     }
 
-    const summaryChanged: any = {};
+    const summaryChanged: Record<string, any> = {};
     if (!prevSnapshot) {
       Object.assign(summaryChanged, current.summary);
     } else {
       for (const k of Object.keys(current.summary || {})) {
-        if (String(current.summary[k]) !== String(prevSnapshot.summary?.[k])) {
-          summaryChanged[k] = current.summary[k];
+        if (String((current.summary as any)[k]) !== String((prevSnapshot.summary as any)?.[k])) {
+          summaryChanged[k] = (current.summary as any)[k];
         }
       }
     }
@@ -147,8 +147,9 @@ setInterval(async () => {
 // Cleanup unknown devices
 setInterval(async () => {
   try {
-    const [unknown] = await db.query('SELECT * FROM unknowndevices');
-    if (unknown.length === 0) return console.log('no unknowndevices.');
+    const unknown = await db.query('SELECT * FROM unknowndevices');
+    const unknownRows = Array.isArray(unknown) ? unknown[0] : unknown;
+    if (!Array.isArray(unknownRows) || unknownRows.length === 0) return console.log('no unknowndevices.');
     const [result] = await db.query(
       'DELETE FROM unknowndevices WHERE LastSeen < NOW() - INTERVAL 10 MINUTE'
     );
