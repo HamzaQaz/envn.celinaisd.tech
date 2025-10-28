@@ -82,6 +82,8 @@ out
 .nuxt
 dist
 .output
+server/dist
+client/dist
 
 # Gatsby files
 .cache/
