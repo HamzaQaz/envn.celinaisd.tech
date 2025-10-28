@@ -4,6 +4,7 @@ import { dashboardAPI } from '../services/api';
 import type { Device, DashboardData } from '../types';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
+import { formatTimeAgo } from '../lib/utils';
 import { 
   Thermometer, 
   Droplets, 
@@ -245,7 +246,7 @@ export default function Dashboard() {
                       <Clock className="w-4 h-4 text-gray-400" />
                       <span className="text-sm">Last Updated</span>
                     </div>
-                    <span className="text-sm text-gray-600">{device.time}</span>
+                    <span className="text-sm text-gray-600">{formatTimeAgo(device.time)}</span>
                   </div>
                 </div>
               </CardContent>
