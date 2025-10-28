@@ -166,6 +166,16 @@ npm run build:server  # Compiles TypeScript backend
 npm run build:client  # Builds React frontend
 ```
 
+### Production Deployment
+
+For deploying to an Ubuntu server with nginx, see:
+- **Quick Start**: [QUICKSTART.md](./QUICKSTART.md) - Fast deployment guide
+- **Full Guide**: [DEPLOYMENT.md](./DEPLOYMENT.md) - Comprehensive deployment documentation
+
+The production setup uses:
+- Frontend: `envn.celinaisd.tech`
+- API/Backend: `enapi.celinaisd.tech`
+
 ---
 
 ## API Endpoints

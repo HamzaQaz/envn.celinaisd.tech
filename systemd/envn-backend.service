@@ -1,0 +1,28 @@
+[Unit]
+Description=Environmental Monitoring Backend Service
+Documentation=https://github.com/HamzaQaz/envn.celinaisd.tech
+After=network.target mysql.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/envn
+Environment="NODE_ENV=production"
+Environment="PORT=3000"
+EnvironmentFile=/var/www/envn/.env
+ExecStart=/usr/bin/node /var/www/envn/server/dist/server.js
+Restart=always
+RestartSec=10
+StandardOutput=append:/var/log/envn/out.log
+StandardError=append:/var/log/envn/error.log
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/log/envn
+
+[Install]
+WantedBy=multi-user.target
