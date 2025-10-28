@@ -1,5 +1,4 @@
 import db from '../db';
-import timeago from 'timeago.js';
 
 interface Device {
   Name: string;
@@ -55,9 +54,7 @@ async function getDashboardData(filter = ''): Promise<DashboardData> {
         status: Status,
         type: readings.length ? readings[0].TYPE : 'Not Specified',
         time: readings.length
-          ? timeago.format(
-              new Date(readings[0].DATE + 'T' + readings[0].TIME)
-            )
+          ? new Date(readings[0].DATE + 'T' + readings[0].TIME).toISOString()
           : 'N/A',
         date: readings.length
           ? new Date(readings[0].DATE).toLocaleDateString('en-US')
